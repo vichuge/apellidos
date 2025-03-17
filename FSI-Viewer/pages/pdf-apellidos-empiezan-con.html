@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+	<link rel="stylesheet" href="../css/menu.css" />
+	<link rel="stylesheet" href="../css/main-menu.css" />
+	<link rel="stylesheet" href="../css/books.css" />
+	<link rel="stylesheet" href="../css/page.css" />
+	<link rel="stylesheet" href="../css/fonts/icon-fonts.css" />
+	<link rel="stylesheet" href="../css/all-buttons.css" />
+</head>
+
+<body>
+	<div id="page-container">
+	<div id="content-wrap">
+	
+	<!-- all other page content -->
+	<header class="mobileMenu">
+
+		<div id="mainMenu" class="mainMenu" style="position: absolute;">
+			<ul class="firstLevelMenu">
+
+			</ul>
+		</div>
+		
+		<div class="backdrop hidden">
+		</div>
+	</header>
+
+	<nav class="desktopMenu">
+		<ul>
+			<!-- Menú - Regresar al Inicio -->
+			<li>
+				<a href="../../index.html"><span class="icon-home"> </span> Inicio</a>
+			</li>
+			
+			<li>
+				<a href="pdfs-apellidos.html">&#9668; Anterior</a>
+			</li>
+		</ul>
+	</nav>
+	
+	<Main>
+	    <div>
+	    	<p style = "font-size: 20px;"><b>Origen de los apellidos que inician con la letra - <spam id="letra">A</spam></b> (Lea de izquierda a derecha de arriba a abajo)</p>
+	    </div>
+	    
+		<table style="width:90%">
+			<thead>
+  			<tr>				
+    			<th style="width:200px; font-size: 20px;" align="center"></th>
+    			<th style="width:200px; font-size: 20px;" align="center"></th>
+    			<th style="width:200px; font-size: 20px;" align="center"></th>
+    			<th style="width:200px; font-size: 20px;" align="center"></th>
+    			<th style="width:200px; font-size: 20px;" align="center"></th>
+  			</tr>
+			</thead>
+
+		</table>
+	</Main>
+
+	<footer>               
+        <div>
+
+        </div> 
+    </footer>
+
+	<script src="../js/version.js"></script>
+
+	</div> <!-- end content-wrap   -->	
+	</div> <!-- end page-container -->
+
+	<script src="../js/apellidos.js"></script>
+	<script>
+		const parametros = new URLSearchParams(window.location.search);
+
+		if(parametros.has('letra')) {
+			const letra = parametros.get('letra');
+			const claseColor = parametros.get('color');
+			//const apellidosFiltrados = apellidos.filter(apellido => apellido.startsWith(letra));
+		
+			function eliminarAcentos(texto) {
+					return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+			}
+		
+			const apellidosFiltrados = apellidos.filter(apellido => 
+					eliminarAcentos(apellido.charAt(0).toLowerCase()) === eliminarAcentos(letra.toLowerCase())
+			);	
+			
+			const table = document.querySelector('table');
+			const tbody = document.createElement('tbody');
+			table.appendChild(tbody);
+
+			for(let i = 0; i < apellidosFiltrados.length; i++) {
+				if(i % 5 === 0) {
+					const tr = document.createElement('tr');
+					tbody.appendChild(tr);
+				}
+
+				const tr = tbody.lastElementChild;
+				const td = document.createElement('td');
+				const a = document.createElement('a');
+				a.href = `pdf-apellido-dinamico.html?apellido=${apellidosFiltrados[i]}`;
+				a.classList.add('button-general', claseColor);
+				a.textContent = apellidosFiltrados[i];
+				td.appendChild(a);
+				tr.appendChild(td);
+			}	
+
+			let letraSpam = document.getElementById('letra');
+			console.log(letraSpam);
+			letraSpam.textContent = letra;
+		}	
+	</script>
+
+</body>
+</html>

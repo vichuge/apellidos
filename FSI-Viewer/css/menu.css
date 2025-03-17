@@ -1,0 +1,162 @@
+.backdrop
+{
+    width:100%;
+    height:100%;
+    z-index: 100;
+    position: fixed;
+    left:0;
+    top:0;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+html, body {
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    padding:0px;
+    margin:0px;
+}
+.displaySubMenu
+{
+left:0% !important;
+display: inline-block;
+}
+* {
+    
+}
+header
+{
+    position:relative;
+    background: white;
+
+}
+.hamburger {
+    display: inline-block;
+    cursor: pointer;
+    margin-top:8px;
+    margin-left:10px;
+}
+
+.bar1, .bar2, .bar3 {
+    width: 30px;
+    height: 5px;
+    background-color: #333;
+    margin: 6px 0;
+    transition: 0.4s;
+}
+
+.change .bar1 {
+    -webkit-transform: rotate(-45deg) translate(-9px, 6px);
+    transform: rotate(-45deg) translate(-9px, 6px);
+}
+
+.change .bar2 {opacity: 0;}
+
+.change .bar3 {
+    -webkit-transform: rotate(45deg) translate(-8px, -8px);
+    transform: rotate(45deg) translate(-8px, -8px);
+}
+header ul {
+    margin: 0px !important;
+    padding: 0px !important;
+    list-style-type: none;
+}
+header div.mainmenu
+{
+    width:200px;
+    left:-100%;
+    height:100vh;
+    background:lightgrey;
+    overflow:hidden;
+    transition: left .2s ease-in;
+    z-index: 1000;
+}
+
+header div.mainmenu > ul {
+    list-style: none;
+    display: inline-block;
+    background:white;
+    position: absolute;
+    width:100%;
+    left:0%;
+    transition: width .5s ease-out;
+}
+
+header div.mainmenu.togglemainmenu {
+    left:0% ;
+}
+header div.mainmenu > ul > li {
+    border: 1px solid black;
+    background: blue;
+}
+header > div.mainmenu > ul >li>ul {
+    list-style: none;
+    display: inline-block;
+    background:red;
+    position: absolute;
+    width:100%;
+    left:100%;
+    transition: left .5s ease-out;    
+}
+header > div.mainmenu>ul>li >ul >li {
+    border: 1px solid yellow;
+}
+.hidden
+{
+    display:none !important;
+}
+header div.mainmenu.showFirstLevelMenu
+{
+    left:0%;
+    transition: left .7s ease-out;
+}
+
+.center
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+}
+main > div.content
+{
+    margin-top:2%;
+    margin-right:10%;
+    margin-left:10%;
+} 
+
+@media screen and (min-width:900px)
+{
+    .desktopMenu {
+
+        display: block;
+    }
+    .mobileMenu{
+        display: none;
+    }
+}
+
+@media screen and (max-width:900px)
+{
+    .desktopMenu {
+
+        display: none;
+    }
+    .mobileMenu{
+        display: block;
+    }
+}
+
+footer {
+  position: absolute;
+  bottom: 0;  /* Always at bottom */
+  left: 25px;
+  margin: auto;   /*Alway centered */
+  width: 95%;
+  height: 50px;   
+  /* Apply to text only */ 
+  padding-top: 15px;
+  padding-left: 20px;
+  background: white;
+}

@@ -1,0 +1,1098 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>FamilySearch</title>
+	<link rel="stylesheet" href="FSI-Viewer/css/menu.css" />
+	<link rel="stylesheet" href="FSI-Viewer/css/main-menu.css" />
+	<link rel="stylesheet" href="FSI-Viewer/css/books.css" />
+	<link rel="stylesheet" href="FSI-Viewer/css/fonts/icon-fonts.css" />
+	<style>
+		/* Estilos del botón */
+		.btn {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        /* Estilos del modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+        }
+
+        .modal {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            position: relative;
+            transform: translateY(50px);
+            opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #aaa;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #555;
+        }
+
+        /* Estilos del formulario */
+        form {
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        /* Estilos para notificaciones */
+        .notification {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Indicador de carga */
+        .loader {
+            display: none;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Estilos para campos inválidos */
+        .invalid {
+            border-color: #dc3545;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+	</style>
+</head>
+
+<body>
+	<nav class="desktopMenu">
+		<ul>
+			<li>
+				<a href="#">FamilySearch
+					<span class="caret"></span>
+				</a>
+				
+				<div>
+					<ul>
+						<li>
+							<a href="FSI-Viewer/pages/video-familysearch-que-es-familysearch.html"><span class="icon-play"> </span> ¿Quién es FS?</a>
+						</li>
+
+						<li>
+							<a href="FSI-Viewer/pages/video-un-poco-mas-de-familysearch.html"><span class="icon-play"> </span> Un poco más de FS</a>
+						</li>
+												
+						<li>
+							<a href="FSI-Viewer/pages/pdf-familysearch-historia-cronologica.html"><span class="icon-file-pdf"> </span> Historia cronológica</a>
+						</li>
+
+						<li>
+							<a href="FSI-Viewer/pages/pdf-familysearch-resena.html"><span class="icon-file-pdf"> </span> Reseña numérica</a>
+						</li>
+						
+						<li>
+							<a href="FSI-Viewer/pages/video-descarga-apps-de-familysearch.html"><span class="icon-play"> </span> Descargar FS-Apps</a>
+						</li>
+						
+						<li>
+							<a href="https://www.familysearch.org"><span class="icon-tree"> </span> Entra a FS</a>
+						</li>
+						
+						<li>
+							<a href="https://www.familysearch.org/discovery/activities/"><span class="icon-accessibility"> </span> Actividades</a>
+						</li>
+					</ul>
+				</div>
+			</li>
+
+			<!-- Menú Paso a paso-->
+			<li>
+				<a href="#">Paso a paso
+					<span class="caret"></span>
+				</a>
+				<div>
+					<ul>
+						<li>
+							<a href="#"><span class="icon-folder-open"> </span> Formatos
+							<span class="caret"></span>
+							</a>	
+							<div>
+								<ul>
+									<li>
+										<a href="#"><span class="icon-folder-open"> </span> Básicos
+										<span class="caret"></span>
+										</a>
+									
+										<div>
+											<ul>
+												<li>
+													<a href="FSI-Viewer/pages/video-llenar-cuadro-enealogico-y-registro-de-grupo-familiar.html"><span class="icon-play"></span> Como llenarlos</a>
+												</li>
+									
+												<li>
+													<a href="FSI-Viewer/pages/pdf-cuadro-genealogico.html"><span class="icon-file-pdf"></span> Cuadro genealógico</a>
+												</li>
+										
+												<li>
+													<a href="FSI-Viewer/pages/pdf-registro-de-grupo-familiar.html"><span class="icon-file-pdf"></span> Reg. Grupo familiar</a>
+												</li>
+											</ul>	
+										</div>
+									</li>									
+
+									<li>
+										<a href="FSI-Viewer/pages/pdf-registro-genealogico-ver-3.38.html"><span class="icon-file-pdf"> </span> Reg. Genealógico</a>
+									</li>
+
+									<li>
+										<a href="FSI-Viewer/pages/pdf-preguntas-de-vida-2.3.html"><span class="icon-file-pdf"></span> Preguntas de vida</a>
+									</li>
+								</ul>	
+							</div>
+						</li>
+						
+						<li>
+							<a href="#"><span class="icon-folder-open"> </span> Tu cuenta FS
+							<span class="caret"></span>
+							</a>
+									
+							<div>
+								<ul>
+									<li>
+										<a href="FSI-Viewer/pages/video-familysearch-crearla-en-un-movil.html"><span class="icon-play"></span> Crearla en tu cel</a>
+									</li>
+									
+									<li>
+										<a href="FSI-Viewer/pages/video-familysearch-crearla-en-la-web.html"><span class="icon-play"></span> Crearla en la web</a>
+									</li>
+									
+									<li>
+										<a href="FSI-Viewer/pages/video-rootstech-como-recuperar-el-nombre-de-usuario-y-contrasena.html"><span class="icon-play"> </span> Recuperarla</a>
+									</li>
+								</ul>	
+							</div>
+						</li>
+
+						<li>
+							<a href="#"><span class="icon-folder-open"> </span> Agrega personas
+							<span class="caret"></span>
+							</a>
+									
+							<div>
+								<ul>
+									<li>
+										<a href="FSI-Viewer/pages/video-familysearch-agregarla-en-el-movil.html"><span class="icon-play"></span> Agrégalas con tu cel</a>
+									</li>
+									
+									<li>
+										<a href="FSI-Viewer/pages/video-familysearch-agregarla-en-la-web.html"><span class="icon-play"></span> Agrégalas en la web</a>
+									</li>
+								</ul>	
+							</div>
+						</li>
+
+						<li>
+							<a href="#"><span class="icon-folder-open"> </span> Busca familiares
+								<span class="caret"></span>
+							</a>
+									
+							<div>
+								<ul>
+									<li>
+										<a href="https://www.familysearch.org/search/tree/name?from=tree"><span class="icon-tree"></span> En el árbol</a>
+									</li>
+									
+									<li>
+										<a href="https://www.familysearch.org/search/"><span class="icon-database"></span> En los registros</a>
+									</li>
+									
+									<li>
+										<a href="https://www.familysearch.org/records/images/"><span class="icon-images"></span> En las imágenes</a>
+									</li>
+									
+									<li>
+										<a href="https://www.familysearch.org/search/genealogies"><span class="icon-tree"></span> En genealogías</a>
+									</li>
+									
+									<li>
+										<a href="https://www.familysearch.org/library/books/"><span class="icon-books"></span> En libros</a>
+									</li>
+								</ul>	
+							</div>
+						</li>
+
+						<li>
+							<a href="#"><span class="icon-folder-open"> </span> Agrega Recuerdo
+								<span class="caret"></span>
+							</a>
+									
+							<div>
+								<ul>
+									<li>
+										<a href="FSI-Viewer/pages/video-familysearch-recuerdos-fotos.html"><span class="icon-point-up"></span> Cómo hacerlo</a>
+									</li>
+																	
+									<li>
+										<a href="FSI-Viewer/pages/video-familysearch-recuerdos-fotos.html"><span class="icon-camera"></span> Fotografías</a>
+									</li>
+									
+									<li>
+										<a href="#"><span class="icon-pen"></span> Historias*</a>
+									</li>
+									
+									<li>
+										<a href="#"><span class="icon-files-empty"></span> Documentos*</a>
+									</li>
+									
+									<li>
+										<a href="FSI-Viewer/pages/video-familysearch-recuerdos-audios.html"><span class="icon-headphones"></span> Audios</a>
+									</li>
+								</ul>	
+							</div>
+						</li>	
+					</ul>
+				</div>
+			</li>
+
+			<!-- Menú Personajes-->
+			<li>
+				<a href="#"> Personajes
+					<span class="caret"></span>
+				</a>
+				<div>
+					<ul>
+						<li>
+							<a href="#"><span class="icon-folder-open"> </span> Históricos
+							<span class="caret"></span>
+							</a>	
+							<div>
+								<ul>
+									<li>
+										<a href="https://ancestors.familysearch.org/es/LZGD-9DL/don-miguel-gregorio-antonio-ignacio-hidalgo-y-costilla-gallaga-mandarte-y-villaseñor%E2%80%8B%E2%80%8B-%22padre-de-la-patria%22-1753-1811"><span class="icon-user"></span> Miguel Hidalgo</a>
+									</li>
+									
+									<li>
+										<a href="https://ancestors.familysearch.org/es/LZ6W-4B2/general-francisco-ignacio-elizondo-villarreal-1766-1813"><span class="icon-user"></span> Ignacio Allende</a>
+									</li>
+									
+									<li>
+										<a href="https://ancestors.familysearch.org/es/L448-CHP/maría-josefa-crescencia-ortíz-téllez-girón-1768-1829"><span class="icon-user"></span> Josefa Ortiz</a>
+									</li>
+
+									<li>
+										<a href="https://ancestors.familysearch.org/es/LHTL-1G4/emperador-agustín-cosme-damián-de-iturbide-y-arámburu-1783-1824"><span class="icon-user"> </span> Agustín de Iturbide</a>
+									</li>
+																		
+									<li>
+										<a href="https://ancestors.familysearch.org/es/LWMQ-1S1/andrés-quintana-roo-1787-1851"><span class="icon-user"> </span> A. Quintana Roo</a>
+									</li>
+
+									<li>
+										<a href="https://ancestors.familysearch.org/es/LZG7-C7D/josé-de-la-cruz-porfirio-díaz-mori-1830-1915"><span class="icon-user"></span> Porfirio Díaz</a>
+									</li>
+									
+									<li>
+										<a href="https://ancestors.familysearch.org/es/L1MP-283/gral.-felipe-de-jesús-ángeles-ramírez-1868-1919"><span class="icon-user"></span> Felipe Ángeles</a>
+									</li>
+									
+									<li>
+										<a href="https://ancestors.familysearch.org/es/9NT4-BFT/josé-maría-pino-suárez-1869-1913"><span class="icon-user"></span> Pino Suárez</a>
+									</li>
+									
+									<li>
+										<a href="https://ancestors.familysearch.org/es/LC7N-7XP/general-de-la-división-del-norte-josé-doroteo-%22francisco-villa%22-arango-arámbula-1878-1923"><span class="icon-user"></span> Francisco Villa</a>
+									</li>
+																		
+									<li>
+										<a href="https://ancestors.familysearch.org/es/G9VJ-2FK/emiliano-zapata-salazar-1879-1919"><span class="icon-user"></span> Emiliano Zapata</a>
+									</li>
+
+									<li>
+										<a href="https://ancestors.familysearch.org/es/GHZ9-8SP/presidente-de-méxico-francisco-ignacio-madero-gonzález-1873-1913"><span class="icon-user"></span> Francisco I. Madero</a>
+									</li>
+									
+									<li>
+										<a href="https://ancestors.familysearch.org/es/LH3B-JN2/general-lázaro-cárdenas-del-río-1895-1970"><span class="icon-user"></span> Lázaro Cárdenas</a>
+									</li>
+								</ul>	
+							</div>
+						</li>
+						
+						<li>
+							<a href="#"><span class="icon-folder-open"> </span> Famosos
+							<span class="caret"></span>
+							</a>	
+							<div>
+								<ul>
+									<li>
+										<a href="https://ancestors.familysearch.org/es/LWQN-HG5/john-davison-rockefeller-sr.-1839-1937"><span class="icon-user"></span> John Rockefeller</a>
+									</li>
+									
+									<li>
+										<a href="https://ancestors.familysearch.org/es/L6T1-VY8/nikola-tesla-1856-1943"><span class="icon-user"></span> Nikola Tesla</a>
+									</li>
+									
+									<li>
+										<a href="https://ancestors.familysearch.org/es/LZNC-TDG/albert-einstein-1879-1955"><span class="icon-user"></span> Albert Einstein</a>
+									</li>
+									
+									<li>
+										<a href="https://ancestors.familysearch.org/es/278B-MCK/ángel-agustín-maría-carlos-fausto-mariano-alfonso-del-sagrado-corazón-de-jesús-lara-y-aguirre-del-pino-1897-1970"><span class="icon-user"></span> Agustín Lara</a>
+									</li>
+
+									<li>
+										<a href="https://ancestors.familysearch.org/es/L4TK-WZL/jorge-alberto-negrete-moreno-1911-1953"><span class="icon-user"></span> Jorge Negrete</a>
+									</li>
+									
+									<li>
+										<a href="https://ancestors.familysearch.org/es/LCQ8-S4M/maría-de-los-ángeles-félix-güereña-1914-2002"><span class="icon-user"></span> María Felix</a>
+									</li>
+
+									<li>
+										<a href="https://ancestors.familysearch.org/es/LHZ1-C3Q/pedro-infante-cruz-1917-1957"><span class="icon-user"></span> Pedro Infante</a>
+									</li>
+
+									<li>
+										<a href="https://ancestors.familysearch.org/es/2WN5-R48/el-santo-rodolfo-guzmán-huerta-1917-1984"><span class="icon-user"></span> El Santo</a>
+									</li>
+
+									<li>
+										<a href="https://ancestors.familysearch.org/es/LX37-M25/gabriel-josé-de-la-concordia-garcía-márquez-1927-2014"><span class="icon-user"></span> Gabriel García M.</a>
+									</li>
+									
+									<li>
+										<a href="https://ancestors.familysearch.org/es/GJ2G-LPX/edson-arantes-do-nascimento-1940-2022"><span class="icon-user"> </span> Pelé</a>
+									</li>
+
+									<li>
+										<a href="https://ancestors.familysearch.org/es/L11G-YLR/vicente-fernández-gómez-1940-2021"><span class="icon-user"> </span> Vicente Fernández</a>
+									</li>
+									
+									<li>
+										<a href="https://ancestors.familysearch.org/es/G3H7-32Y/josé-rómulo-sosa-ortiz-1948-2019"><span class="icon-user"> </span> José José</a>
+									</li>
+								</ul>	
+							</div>
+						</li>
+
+						<li>
+							<a href="#"><span class="icon-folder-open"> </span> De cambio
+							<span class="caret"></span>
+							</a>
+									
+							<div>
+								<ul>
+									<li>
+										<a href="https://www.familysearch.org/tree/pedigree/landscape/LJLQ-WRC"><span class="icon-user"></span> Benjamín Franklin</a>
+									</li>
+									
+									<li>
+										<a href="https://www.familysearch.org/tree/pedigree/landscape/KNDX-MKG"><span class="icon-user"></span> George Washington</a>
+									</li>
+
+									<li>
+										<a href="https://www.familysearch.org/tree/pedigree/landscape/MD4F-B84"><span class="icon-user"></span> Napoleón Bonaparte</a>
+									</li>
+																		
+									<li>
+										<a href="https://www.familysearch.org/tree/pedigree/landscape/MD4F-B84"><span class="icon-user"></span> Simón Bolivar</a>
+									</li>
+
+									<li>
+										<a href="https://www.familysearch.org/tree/pedigree/landscape/LZFQ-KXW"><span class="icon-user"></span> Gandhi</a>
+									</li>
+													
+									<li>
+										<a href="https://www.familysearch.org/tree/pedigree/landscape/LC32-HZ6"><span class="icon-user"></span> Winston Churchill</a>
+									</li>			
+																		
+									<li>
+										<a href="https://www.familysearch.org/tree/pedigree/landscape/L5RM-ZD4"><span class="icon-user"></span> Juan Pablo II</a>
+									</li>
+									
+									<li>
+										<a href="https://www.familysearch.org/tree/pedigree/landscape/L1SN-TQ1"><span class="icon-user"></span> Malcom X</a>
+									</li>
+									
+									<li>
+										<a href="https://www.familysearch.org/tree/pedigree/landscape/LHR4-7R6"><span class="icon-user"></span> El Che Guevara</a>
+									</li>
+									
+									<li>
+										<a href="https://www.familysearch.org/tree/pedigree/landscape/LZJ6-YB2"><span class="icon-user"> </span> Martin Luther K.</a>
+									</li>
+
+									<li>
+										<a href="https://www.familysearch.org/tree/pedigree/landscape/L233-FSC"><span class="icon-user"> </span> Steve Jobs</a>
+									</li>
+																		
+									<li>
+										<a href="https://www.familysearch.org/tree/pedigree/landscape/L5XN-6LV"><span class="icon-user"> </span> Lady Di</a>
+									</li>
+								</ul>	
+							</div>
+						</li>
+
+						<li>
+							<a href="#"><span class="icon-folder-open"> </span> ¿Eres pariente de?
+								<span class="caret"></span>
+							</a>
+									
+							<div>
+								<ul>
+									<li>
+										<a href="https://www.familysearch.org/es/connect/famous/moctezuma-ii"><span class="icon-user"></span> Moctezuma II</a>
+									</li>
+
+									<li>
+										<a href="https://www.familysearch.org/es/connect/famous/sor-juana-ines-de-la-cruz"><span class="icon-user"></span> Sor Juana</a>
+									</li>
+									
+									<li>
+										<a href="https://www.familysearch.org/es/connect/famous/benito-juarez"><span class="icon-user"></span> Benito Juárez</a>
+									</li>
+																		
+									<li>
+										<a href="https://www.familysearch.org/es/connect/famous/venustiano-carranza"><span class="icon-user"></span> Venustiano Carranza</a>
+									</li>
+									
+									<li>
+										<a href="https://www.familysearch.org/es/connect/famous/frida-kahlo"><span class="icon-user"></span> Frida Kahlo</a>
+									</li>
+									
+									<li>
+										<a href="https://www.familysearch.org/es/connect/famous/carmen-salinas"><span class="icon-user"></span> Carmen Salinas</a>
+									</li>
+									
+									<li>
+										<a href="https://www.familysearch.org/es/connect/famous/"><span class="icon-users"></span> Más...</a>
+									</li>
+									
+								</ul>	
+							</div>
+						</li>
+					</ul>
+				</div>
+			</li>
+
+			<!-- Menú Aprendamos-->
+			<li>
+				<a href="#">Aprendamos
+					<span class="caret"></span>
+				</a>
+				<div>
+					<ul>
+						</li>
+							<ul>
+								<li>
+									<a href="FSI-Viewer/pages/pdfs-aprendamos-basico.html"><span class="icon-folder-open"> </span> Nivel básico</a>
+								</li>
+								
+								<li>
+									<a href="FSI-Viewer/pages/pdfs-aprendamos-intermedio.html"><span class="icon-folder-open"> </span>Nivel intermedio</a>
+								</li>
+								
+								<li>
+									<a href="FSI-Viewer/pages/pdfs-aprendamos-avanzado.html"><span class="icon-folder-open"> </span>Nivel avanzado</a>
+								</li>								
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</li>
+
+			<!-- Menú Apellidos-->
+			<li>
+				<a href="#">Apellidos
+					<span class="caret"></span>
+				</a>
+				<div>
+					<ul>
+						</li>
+							<ul>
+								<li>
+									<a href="FSI-Viewer/pages/pdfs-apellidos.html"><span class="icon-folder-open"> </span>Origen y/o significado</a>
+								</li>
+								
+								<li>
+									<a href="FSI-Viewer/pages/pdfs-apellidos.html"><span class="icon-folder-open"> </span>Apellidos mayas</a>
+								</li>
+								
+								<li>
+									<a href="#" onclick="abrirModal()"><span class="icon-folder-open"> </span>Solicite apellido</a>
+								</li>							
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</li>
+
+			<!-- Menú Videos-->
+			<li>
+				<a href="#">Videos
+					<span class="caret"></span>
+				</a>
+				<div>
+					<ul>
+						</li>
+							<ul>
+								<li>
+									<a href="#"><span class="icon-folder-open"> </span> Inspiradores
+									<span class="caret"></span>
+									</a>
+									
+									<!-- Menú Experiencias Nivel 3-->
+									<div>
+										<ul>
+											<li>
+												<a href="FSI-Viewer/pages/video-inspirador-cual_es_tu_identidad.html"><span class="icon-play"> </span> Identidad</a>
+											</li>
+											
+											<li>
+												<a href="FSI-Viewer/pages/video-inspirador-eres_suficiente-celebremos_a_las_mujeres_en_nuestra_vida.html"><span class="icon-play"> </span> Mujeres</a>
+											</li>
+											
+											<li>
+												<a href="FSI-Viewer/pages/video-inspirador-conoce_a_mi_abuela.html"><span class="icon-play"> </span> Abuela</a>
+											</li>
+											
+											<li>
+												<a href="FSI-Viewer/pages/video-inspirador-pertenencia-y-conexion.html"><span class="icon-play"> </span> Pertenencia</a>
+											</li>
+
+											<li>
+												<a href="FSI-Viewer/pages/video-inspirador-todos-estamos-buscando.html"><span class="icon-play"> </span> Buscando</a>
+											</li>
+											
+											<li>
+												<a href="FSI-Viewer/pages/video-inspirador-tu-propia-historia.html"><span class="icon-play"> </span> Genealogía</a>
+											</li>
+
+											<li>
+												<a href="FSI-Viewer/pages/video-inspirador-tu_historia_cuenta-tu_genealogi­a_es_importante.html"><span class="icon-play"> </span> Historia</a>
+											</li>
+
+											<li>
+												<a href="FSI-Viewer/pages/video-inspirador-enduring-love.html"><span class="icon-play"> </span> Amame</a>
+											</li>
+																						
+											<li>
+												<a href="FSI-Viewer/pages/video-inspirador-tus-recuerdos-son-lo-mas-preciado.html"><span class="icon-play"> </span> Recuérdame</a>
+											</li>
+
+											<li>
+												<a href="FSI-Viewer/pages/video-inspirador-conoces-el-origen-de-tu-apellido.html"><span class="icon-play"> </span> Apellido</a>
+											</li>
+
+											<li>
+												<a href="FSI-Viewer/pages/video-inspirador-conserva-tus-fotos-e-historia-familiar.html"><span class="icon-play"> </span> Fotografías</a>
+											</li>
+												
+											<li>
+												<a href="FSI-Viewer/pages/video-inspirador-aplicacion-gratis-recuerdos-de-familysearch.html"><span class="icon-play"> </span> Recuerdos</a>
+											</li>
+																															
+											<li>
+												<a href="FSI-Viewer/pages/video-indice-de-libertos.html"><span class="icon-play"> </span> Libertos</a>
+											</li>
+										</ul>	
+									</div>
+								</li>
+								
+								<li>
+									<a href="#"><span class="icon-folder-open"> </span> Iglesia
+									<span class="caret"></span>
+									</a>
+									<!-- Menú Experiencias Nivel 3-->
+									<div>
+										<ul>
+											<li>
+												<a href="FSI-Viewer/pages/video-aprende-lo-basico-de-los-registros-parroquiales-de-america-latina.html"><span class="icon-play"> </span> Reg. Parroquiales</a>
+											</li>	
+										</ul>	
+									</div>
+								</li>
+								
+								<li>
+									<a href="#"><span class="icon-folder-open"> </span> Registro Civil
+									<span class="caret"></span>
+									</a>
+									<!-- Menú Experiencias Nivel 3-->
+									<div>
+										<ul>
+											<li>
+												<a href="FSI-Viewer/pages/video-aprende-lo-basico-de-los-registros-civiles-de-america-latina.html"><span class="icon-play"> </span> Registro Civil</a>
+											</li>
+											<li>
+												<!-- Menú Experiencias    <a href="#">Experiencia 2</a>   -->
+											</li>
+										</ul>	
+									</div>
+								</li>
+								
+								<li>
+									<a href="FSI-Viewer/pages/video-personas.html"><span class="icon-folder-open"> </span> Personas
+									<span class="caret"></span>
+									</a>
+								</li>		
+
+								<li>
+									<a href="#"><span class="icon-folder-open"> </span> Preservación
+									<span class="caret"></span>
+									</a>
+									<!-- Menú Experiencias Nivel 3-->
+									<div>
+										<ul>
+											<li>
+												<a href="FSI-Viewer/pages/video-la-isla-niue.html"><span class="icon-play"> </span> La Isla Niue</a>
+											</li>
+											
+											<li>
+												<a href="FSI-Viewer/pages/video-sierra-leona.html"><span class="icon-play"> </span> Sierra Leona</a>
+											</li>
+										</ul>	
+									</div>
+								</li>						
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</li>
+
+			<!-- Menú Sitios-->
+			<li>
+				<a href="#">Sitios
+					<span class="caret"></span>
+				</a>
+				<div>
+					<ul>
+						<li>
+							<a href="https://www.familysearch.org/"><span class="icon-tree"> </span> FamilySearch</a>
+						</li>
+						
+						<li>
+							<a href="#"><span class="icon-folder-open"> </span> RootsTech
+								<span class="caret"></span>
+							</a>
+
+							<!-- Menú Experiencias Nivel 3-->
+							<div>
+								<ul>
+									<li>
+										<a href="FSI-Viewer/pages/video-familysearch-que-es-rootstech.html"><span class="icon-tree"> </span> ¿Qué es RootsTech?</a>
+									</li>
+									
+									<li>
+										<a href="FSI-Viewer/pages/video-familysearch-en-vivo-rootstech.html"><span class="icon-tree"> </span> En vivo RootsTech</a>
+									</li>
+									
+									<li>
+										<a href="FSI-Viewer/pages/video-familysearch-inscribete-a-rootstech.html"><span class="icon-tree"> </span> Inscríbete Rootstech</a>
+									</li>
+									
+									<li>
+										<a href="https://www.familysearch.org/es/rootstech/"><span class="icon-earth"> </span> Entra a RootsTech</a>
+									</li>
+								</ul>	
+							</div>
+						</li>
+						
+						<li>
+							<a href="https://fhtl.org/"><span class="icon-lab"> </span> Lab (inglés)</a>
+						</li>
+						
+						<li>
+							<a href="#"><span class="icon-folder-open"> </span> Externos
+								<span class="caret"></span>
+							</a>
+
+							<!-- Menú Experiencias Nivel 3-->
+							<div>
+								<ul>
+									<li>
+										<a href="https://archivos.gob.mx/GuiaGeneral/GuiaGeneral.html"><span class="icon-sphere"> </span> AGN-Guía General</a>
+									</li>
+									
+									<li>
+										<a href="https://memoricamexico.gob.mx/"><span class="icon-sphere"> </span> AGN-Memórica</a>
+									</li>
+									
+									<li>
+										<a href="https://gw.geneanet.org/sanchiz"><span class="icon-sphere"> </span> Seminario de G.</a>
+									</li>
+									
+									<li>
+										<a href="https://pares.cultura.gob.es/inicio.html"><span class="icon-earth"> </span> PARES</a>
+									</li>
+								</ul>	
+							</div>
+						</li>
+					</lu>	
+				</div>
+			</li>
+
+			<!-- Menú Redes Sociales-->
+			<li>
+				<a href="#">Redes Sociales
+					<span class="caret"></span>
+				</a>
+				<div>
+					<ul>
+						<li>
+							<a href="https://www.facebook.com/FamilySearchEsp"><span class="icon-facebook"> </span> Facebook</a>
+						</li>
+						
+						<li>
+							<a href="https://www.youtube.com/channel/UC4v2CJsng6W7uCle8PgYm3Q"><span class="icon-youtube2"> </span> Youtube</a>
+						</li>
+						
+						<li>
+							<a href="https://www.instagram.com/familysearchesp/"><span class="icon-instagram"> </span> Instagram</a>
+						</li>
+					</lu>	
+				</div>
+			</li>
+
+			<!-- Menú Ayuda-->
+			<li>
+				<a href="#">Ayuda
+					<span class="caret"></span>
+				</a>
+				<div>
+					<ul>
+						<li>
+							<a href="https://www.familysearch.org/es/help/helpcenter/landing"><span class="icon-books"> </span> Centro de ayuda</a>
+						</li>
+						
+						<li>
+							<a href="FSI-Viewer/pages/htm-ayuda-whatapp-email.html"><span class="icon-whatsapp"> </span> WhatsApp y Correo</a>
+						</li>
+						
+						<li>
+							<a href="https://www.familysearch.org/es/fieldops/lao-programar-un-calendario-de-citas"><span class="icon-users"> </span> Personalizada</a>
+						</li>
+						
+						<li>
+							<a href="https://www.familysearch.org/es/blog/es"><span class="icon-blogger"> </span> Blog</a>
+						</li>
+						
+						<li>
+							<a href="https://www.familysearch.org/es/wiki/M%C3%A9xico_-_Genealog%C3%ADa"><span class="icon-wikipedia"> </span> Wiki</a>
+						</li>
+					</lu>	
+				</div>
+			</li>			
+		</ul>
+	</nav>
+	
+	<Main>
+		<center>
+			<img src="./FSI-Viewer/images/FamilySearch-Home-1200x675.png" />
+			<div id="notification" style="display: none;" class="notification"></div>
+			<div class="loader" id="loader"></div>
+		</center>
+	</Main>
+
+	<footer>               
+        <div>
+
+        </div> 
+    </footer>
+
+		<div class="modal-overlay" id="modalOverlay">
+			<div class="modal">
+					<div class="modal-close" id="closeModal">&times;</div>
+					<h2>Registrar Nueva Solicitud</h2>
+					<form id="contactForm">
+							<div class="form-group">
+									<label for="apellido">Apellido:</label>
+									<input type="text" id="apellido" name="apellido" required>
+									<div class="error-message" id="apellidoError">Por favor, ingresa tu apellido.</div>
+							</div>
+							<div class="form-group">
+									<label for="correo">Correo Electrónico:</label>
+									<input type="email" id="correo" name="correo" required>
+									<div class="error-message" id="correoError">Por favor, ingresa un correo electrónico válido.</div>
+							</div>
+							<button type="submit" class="btn submit-btn">Enviar Solicitud</button>
+					</form>
+			</div>
+	</div>
+
+	<script src="FSI-Viewer/js/version.js"></script>
+
+	<script>
+		// URL de la API (necesitarás ajustarla a tu entorno)
+		// Si estás ejecutando en localhost con XAMPP, podría ser algo como:
+		const API_URL = 'https://compadregames.com/apellidosapi/apellidos-endpoint.php';
+		
+		// Elementos del DOM
+		const openModalBtn = document.getElementById('openModal');
+		const closeModalBtn = document.getElementById('closeModal');
+		const modalOverlay = document.getElementById('modalOverlay');
+		const contactForm = document.getElementById('contactForm');
+		const notification = document.getElementById('notification');
+		const loader = document.getElementById('loader');
+		
+		// Campos del formulario
+		const apellidoInput = document.getElementById('apellido');
+		const correoInput = document.getElementById('correo');
+		const apellidoError = document.getElementById('apellidoError');
+		const correoError = document.getElementById('correoError');
+		
+		// Abrir el modal con animación
+		//openModalBtn.addEventListener('click', () => {
+		const abrirModal = () => {
+				modalOverlay.style.display = 'flex';
+				// Pequeño retraso para asegurar que la transición funcione correctamente
+				setTimeout(() => {
+						modalOverlay.classList.add('active');
+				}, 10);
+				resetForm();
+		};
+		
+		// Cerrar el modal (haciendo clic en X)
+		closeModalBtn.addEventListener('click', cerrarModal);
+		
+		// Cerrar el modal haciendo clic fuera
+		modalOverlay.addEventListener('click', (event) => {
+				if (event.target === modalOverlay) {
+						cerrarModal();
+				}
+		});
+		
+		// Función para cerrar el modal con animación
+		function cerrarModal() {
+				modalOverlay.classList.remove('active');
+				// Esperar a que termine la animación antes de ocultar
+				setTimeout(() => {
+						modalOverlay.style.display = 'none';
+				}, 300);
+		}
+		
+		// Enviar el formulario
+		contactForm.addEventListener('submit', async (event) => {
+				event.preventDefault();
+				
+				// Validar el formulario antes de enviar
+				if (!validarFormulario()) {
+						return;
+				}
+				
+				// Recopilar datos del formulario
+				const formData = {
+						apellido: apellidoInput.value.trim(),
+						correo: correoInput.value.trim()
+				};
+				
+				try {
+						// Mostrar indicador de carga
+						loader.style.display = 'block';
+						notification.style.display = 'none';
+						
+						// Enviar datos a la API
+						const response = await fetch(API_URL, {
+								method: 'POST',
+								headers: {
+										'Content-Type': 'application/json',
+								},
+								body: JSON.stringify(formData)
+						});
+						
+						// Procesar la respuesta
+						const data = await response.json();
+						console.log('Respuesta:', data);
+						
+						// Ocultar indicador de carga
+						loader.style.display = 'none';
+						
+						if (response.ok) {
+								// Mostrar mensaje de éxito
+								mostrarNotificacion('¡Solicitud registrada exitosamente!', 'success');
+								cerrarModal();
+								resetForm();
+						} else {
+								// Mostrar mensaje de error
+								mostrarNotificacion(`Error: ${data.error || 'No se pudo registrar la solicitud, intente más tarde'}`, 'error');
+						}
+				} catch (error) {
+						console.error('Error:', error);
+						loader.style.display = 'none';
+						mostrarNotificacion('Error de conexión. Por favor, intente más tarde.', 'error');
+				}
+		});
+		
+		// Función para validar el formulario
+		function validarFormulario() {
+				let esValido = true;
+				
+				// Validar apellido
+				if (apellidoInput.value.trim() === '') {
+						mostrarError(apellidoInput, apellidoError, 'Por favor, ingresa tu apellido.');
+						esValido = false;
+				} else {
+						ocultarError(apellidoInput, apellidoError);
+				}
+				
+				// Validar correo
+				const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+				if (!regexCorreo.test(correoInput.value.trim())) {
+						mostrarError(correoInput, correoError, 'Por favor, ingresa un correo electrónico válido.');
+						esValido = false;
+				} else {
+						ocultarError(correoInput, correoError);
+				}
+				
+				return esValido;
+		}
+		
+		// Función para mostrar error en un campo
+		function mostrarError(input, errorElement, mensaje) {
+				input.classList.add('invalid');
+				errorElement.textContent = mensaje;
+				errorElement.style.display = 'block';
+		}
+		
+		// Función para ocultar error en un campo
+		function ocultarError(input, errorElement) {
+				input.classList.remove('invalid');
+				errorElement.style.display = 'none';
+		}
+		
+		// Función para mostrar notificación
+		function mostrarNotificacion(mensaje, tipo) {
+				notification.textContent = mensaje;
+				notification.className = 'notification ' + tipo;
+				notification.style.display = 'block';
+				
+				// Ocultar la notificación después de 5 segundos
+				setTimeout(() => {
+						notification.style.display = 'none';
+				}, 5000);
+		}
+		
+		// Función para resetear el formulario
+		function resetForm() {
+				contactForm.reset();
+				ocultarError(apellidoInput, apellidoError);
+				ocultarError(correoInput, correoError);
+		}
+		
+		// Validación en tiempo real
+		apellidoInput.addEventListener('input', () => {
+				if (apellidoInput.value.trim() !== '') {
+						ocultarError(apellidoInput, apellidoError);
+				}
+		});
+		
+		correoInput.addEventListener('input', () => {
+				const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+				if (regexCorreo.test(correoInput.value.trim())) {
+						ocultarError(correoInput, correoError);
+				}
+		});
+</script>
+</body>
+</html>

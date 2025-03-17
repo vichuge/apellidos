@@ -1,0 +1,33 @@
+/* Table parameters */
+
+table {
+margin-left:25px
+}
+
+table, th, td {
+  padding-left:10px;
+  padding-right:15px;
+  padding-bottom: 10px;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding-left: 10px;
+}
+
+td:hover {background-color: #dfdfdf;}
+
+ul{
+padding-left:40px;
+}
+ 
+li{
+padding-left:10px;
+}
+
+p {
+margin-left:25px
+}
+
+.center { margin: 0 auto; width: 1200px; }
+

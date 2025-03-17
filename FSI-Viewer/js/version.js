@@ -1,0 +1,1 @@
+document.getElementsByTagName("footer")[0].innerHTML="<div>Copyright &copy; 2025 <a style='color:#87b940'><strong>FamilySearch International. </strong></a>Versión 1.98 para uso exclusivamente informativo.</div>";
