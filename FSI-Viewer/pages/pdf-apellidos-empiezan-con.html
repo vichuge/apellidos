@@ -101,7 +101,13 @@
 				const tr = tbody.lastElementChild;
 				const td = document.createElement('td');
 				const a = document.createElement('a');
-				a.href = `pdf-apellido-dinamico.html?apellido=${apellidosFiltrados[i]}`;
+				//a.href = `pdf-apellido-dinamico.html?apellido=${apellidosFiltrados[i]}`; // aqui abre el visualizador de PDF's, sería mejor que abra el pdf en un blank
+				let apellido = apellidosFiltrados[i];
+				let primeraLetra = apellido.charAt(0).toUpperCase();
+
+				a.href = `../pdfs/apellidos/${primeraLetra}/${apellido}.pdf`;
+				a.target = "_blank"; // Abre en una nueva pestaña
+
 				a.classList.add('button-general', claseColor);
 				a.textContent = apellidosFiltrados[i];
 				td.appendChild(a);
