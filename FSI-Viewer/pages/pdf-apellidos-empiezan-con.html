@@ -103,7 +103,7 @@
 				const a = document.createElement('a');
 				//a.href = `pdf-apellido-dinamico.html?apellido=${apellidosFiltrados[i]}`; // aqui abre el visualizador de PDF's, sería mejor que abra el pdf en un blank
 				let apellido = apellidosFiltrados[i];
-				let primeraLetra = apellido.charAt(0).toUpperCase();
+				let primeraLetra = apellido.charAt(0).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
 
 				a.href = `../pdfs/apellidos/${primeraLetra}/${apellido.toLowerCase()}.pdf`;
 				a.target = "_blank"; // Abre en una nueva pestaña
